@@ -23,7 +23,11 @@
     "./dist/cjs/qrex.js": "./dist/cjs/qrex.browser.js",
     "fs": false
   },
-  "files": ["bin", "dist", "helper"],
+  "files": [
+    "bin",
+    "dist",
+    "helper"
+  ],
   "homepage": "https://github.com/chrisllontop/qrex",
   "license": "MIT",
   "scripts": {
@@ -40,6 +44,7 @@
   "dependencies": {
     "dijkstrajs": "^1.0.1",
     "pngjs": "^5.0.0",
+    "runtypes": "^6.7.0",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
@@ -47,6 +52,9 @@
     "@biomejs/biome": "^1.9.4",
     "@rspack/cli": "^1.1.0",
     "@rspack/core": "^1.1.0",
+    "@types/node": "^16.18.119",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "babel-loader": "^9.2.1",
     "browserify": "^16.5.1",
     "canvas": "^2.8.0",
