@@ -1,4 +1,4 @@
-import { ALPHANUMERIC } from './mode'
+import { type Mode, ALPHANUMERIC } from './mode';
 
 /**
  * Array of characters available in alphanumeric mode
@@ -9,7 +9,8 @@ import { ALPHANUMERIC } from './mode'
  *
  * @type {Array}
  */
-const ALPHA_NUM_CHARS = [
+
+const ALPHA_NUM_CHARS: Array<string> = [
   '0',
   '1',
   '2',
@@ -55,33 +56,36 @@ const ALPHA_NUM_CHARS = [
   '.',
   '/',
   ':',
-]
+];
 
 export class AlphanumericData {
-  constructor(data) {
-    this.mode = ALPHANUMERIC
-    this.data = data
+  mode: Mode;
+  data: string[];
+
+  constructor(data: string[]) {
+    this.data = data;
+    this.mode = ALPHANUMERIC;
   }
 
-  getLength () {
-    return this.data.length
+  getLength(): number {
+    return this.data.length;
   }
 
-  getBitsLength () {
-    return AlphanumericData.getBitsLength(this.data.length)
+  getBitsLength(): number {
+    return AlphanumericData.getBitsLength(this.data.length);
   }
 
-  write(bitBuffer) {
-    let i
+  write(bitBuffer: Buffers): void {
+    let i;
 
     // Input data characters are divided into groups of two characters
     // and encoded as 11-bit binary codes.
     for (i = 0; i + 2 <= this.data.length; i += 2) {
       // The character value of the first character is multiplied by 45
-      let value = ALPHA_NUM_CHARS.indexOf(this.data[i]) * 45
+      let value = ALPHA_NUM_CHARS.indexOf(this.data[i]) * 45;
 
       // The character value of the second digit is added to the product
-      value += ALPHA_NUM_CHARS.indexOf(this.data[i + 1])
+      value += ALPHA_NUM_CHARS.indexOf(this.data[i + 1]);
 
       // The sum is then stored as 11-bit binary number
       bitBuffer.put(value, 11)
@@ -90,11 +94,11 @@ export class AlphanumericData {
     // If the number of input data characters is not a multiple of two,
     // the character value of the final character is encoded as a 6-bit binary number.
     if (this.data.length % 2) {
-      bitBuffer.put(ALPHA_NUM_CHARS.indexOf(this.data[i]), 6)
+      bitBuffer.put(ALPHA_NUM_CHARS.indexOf(this.data[i]), 6);
     }
   }
 
-  static getBitsLength(length) {
-    return 11 * Math.floor(length / 2) + 6 * (length % 2)
+  static getBitsLength(length: number): number {
+    return 11 * Math.floor(length / 2) + 6 * (length % 2);
   }
 }

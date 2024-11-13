@@ -1,11 +1,14 @@
-import * as Polynomial from './polynomial'
+import * as Polynomial from './polynomial';
 
 export class ReedSolomonEncoder {
-  constructor (degree) {
-    this.genPoly = undefined
-    this.degree = degree
+  degree: number;
+  genPoly: undefined | Uint8Array;
 
-    if (this.degree) this.initialize(this.degree)
+  constructor(degree: number) {
+    this.genPoly = undefined;
+    this.degree = degree;
+
+    if (this.degree) this.initialize(this.degree);
   }
 
   /**
@@ -14,10 +17,10 @@ export class ReedSolomonEncoder {
    *
    * @param  {Number} degree
    */
-  initialize (degree) {
+  initialize(degree: number): void {
     // create an irreducible generator polynomial
-    this.degree = degree
-    this.genPoly = Polynomial.generateECPolynomial(this.degree)
+    this.degree = degree;
+    this.genPoly = Polynomial.generateECPolynomial(this.degree);
   }
 
   /**
@@ -26,9 +29,9 @@ export class ReedSolomonEncoder {
    * @param  {Uint8Array} data Buffer containing input data
    * @return {Uint8Array}      Buffer containing encoded data
    */
-  encode (data) {
+  encode(data: Uint8Array): Uint8Array {
     if (!this.genPoly) {
-      throw new Error('Encoder not initialized')
+      throw new Error('Encoder not initialized');
     }
 
     // Calculate EC for this data block
@@ -38,19 +41,19 @@ export class ReedSolomonEncoder {
 
     // The error correction codewords are the remainder after dividing the data codewords
     // by a generator polynomial
-    const remainder = Polynomial.mod(paddedData, this.genPoly)
+    const remainder = Polynomial.mod(paddedData, this.genPoly);
 
     // return EC data blocks (last n byte, where n is the degree of genPoly)
     // If coefficients number in remainder are less than genPoly degree,
     // pad with 0s to the left to reach the needed number of coefficients
-    const start = this.degree - remainder.length
+    const start = this.degree - remainder.length;
     if (start > 0) {
-      const buff = new Uint8Array(this.degree)
-      buff.set(remainder, start)
+      const buff = new Uint8Array(this.degree);
+      buff.set(remainder, start);
 
-      return buff
+      return buff;
     }
 
-    return remainder
+    return remainder;
   }
 }

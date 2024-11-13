@@ -1,5 +1,6 @@
 let toSJISFunction;
-const CODEWORDS_COUNT = [
+
+const CODEWORDS_COUNT: Array<number> = [
   0, // Not used
   26,
   44,
@@ -49,7 +50,7 @@ const CODEWORDS_COUNT = [
  * @param  {Number} version QR Code version
  * @return {Number}         size of QR code
  */
-export function getSymbolSize (version) {
+export function getSymbolSize(version: number): number {
   if (!version) throw new Error('"version" cannot be null or undefined')
   if (version < 1 || version > 40)
     throw new Error('"version" should be in range from 1 to 40')
@@ -62,7 +63,7 @@ export function getSymbolSize (version) {
  * @param  {Number} version QR Code version
  * @return {Number}         Data length in bits
  */
-export function getSymbolTotalCodewords (version) {
+export function getSymbolTotalCodewords(version: number): number {
   return CODEWORDS_COUNT[version]
 }
 
@@ -72,7 +73,7 @@ export function getSymbolTotalCodewords (version) {
  * @param  {Number} data Value to encode
  * @return {Number}      Encoded value
  */
-export function getBCHDigit (data) {
+export function getBCHDigit(data: number): number {
   let digit = 0
 
   while (data !== 0) {
@@ -83,7 +84,7 @@ export function getBCHDigit (data) {
   return digit
 }
 
-export function setToSJISFunction (f) {
+export function setToSJISFunction(f: any): void {
   if (typeof f !== 'function') {
     throw new Error('"toSJISFunc" is not a valid function.')
   }
@@ -91,10 +92,10 @@ export function setToSJISFunction (f) {
   toSJISFunction = f
 }
 
-export function isKanjiModeEnabled () {
+export function isKanjiModeEnabled(): boolean {
   return typeof toSJISFunction !== 'undefined'
 }
 
-export function toSJIS (kanji) {
+export function toSJIS(kanji): any {
   return toSJISFunction(kanji)
 }

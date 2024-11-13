@@ -1,51 +1,49 @@
-export const L = { bit: 1 }
-export const M = { bit: 0 }
-export const Q = { bit: 3 }
-export const H = { bit: 2 }
+import { type Mode } from "./mode";
 
-function fromString (string) {
-  if (typeof string !== 'string') {
-    throw new Error('Param is not a string')
-  }
+export const L: Mode = { bit: 1 };
+export const M: Mode = { bit: 0 };
+export const Q: Mode = { bit: 3 };
+export const H: Mode = { bit: 2 };
 
-  const lcStr = string.toLowerCase()
+function fromString(errStr: string): Mode {
+  const lcStr = errStr.toLowerCase()
 
   switch (lcStr) {
     case 'l':
     case 'low':
-      return L
+      return L;
 
     case 'm':
     case 'medium':
-      return M
+      return M;
 
     case 'q':
     case 'quartile':
-      return Q
+      return Q;
 
     case 'h':
     case 'high':
-      return H
+      return H;
 
     default:
-      throw new Error(`Unknown EC Level: ${string}`)
+      throw new Error(`Unknown EC Level: ${errStr}`);
   }
 }
 
-export function isValid (level) {
+export function isValid(level: Mode): boolean {
   return (
     level && typeof level.bit !== 'undefined' && level.bit >= 0 && level.bit < 4
-  )
+  );
 }
 
-export function from (value, defaultValue) {
+export function from(value: Mode, defaultValue: Mode): Mode {
   if (isValid(value)) {
-    return value
+    return value;
   }
 
   try {
-    return fromString(value)
+    return fromString(value);
   } catch (e) {
-    return defaultValue
+    return defaultValue;
   }
 }
