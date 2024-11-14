@@ -1,9 +1,11 @@
+import { type QRCodeToDataURLOptionsJpegWebp as RendererOptions, type QRCode } from "qrcode";
+
 import * as svgTagRenderer from './svg-tag'
 import fs from 'fs'
 
 export const render = svgTagRenderer.render
 
-export function renderToFile (path, qrData, options, cb) {
+export function renderToFile(path: string, qrData: QRCode, options: RendererOptions, cb: function | undefined): void {
   if (typeof cb === "undefined") {
     cb = options;
     options = undefined;

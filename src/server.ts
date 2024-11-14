@@ -5,7 +5,12 @@ import * as Utf8Renderer from './renderer/utf8'
 import * as TerminalRenderer from './renderer/terminal'
 import * as SvgRenderer from './renderer/svg'
 
-function checkParams(text, opts, cb) {
+export type Parameters = {
+  cb: function;
+  opts: Object;
+}
+
+function checkParams(text: string | undefined, opts: Object, cb: function | undefined): Parameters {
   if (typeof text === "undefined") {
     throw new Error("String required as first argument");
   }
@@ -30,11 +35,11 @@ function checkParams(text, opts, cb) {
   };
 }
 
-function getTypeFromFilename(path) {
+function getTypeFromFilename(path: string): string {
   return path.slice(((path.lastIndexOf(".") - 1) >>> 0) + 2).toLowerCase();
 }
 
-function getRendererFromType(type) {
+function getRendererFromType(type: string) {
   switch (type) {
     case "svg":
       return SvgRenderer;
@@ -50,7 +55,7 @@ function getRendererFromType(type) {
   }
 }
 
-function getStringRendererFromType(type) {
+function getStringRendererFromType(type: string) {
   switch (type) {
     case "svg":
       return SvgRenderer;
@@ -64,7 +69,7 @@ function getStringRendererFromType(type) {
   }
 }
 
-function render(renderFunc, text, params) {
+function render(renderFunc: function, text: string, params: Parameters) {
   if (!params.cb) {
     return new Promise((resolve, reject) => {
       try {
@@ -88,26 +93,26 @@ export const create = QRCode.create
 
 export const toCanvas = require('./browser').toCanvas
 
-export function toString (text, opts, cb) {
+export function toString(text: string, opts: Object, cb: function) {
   const params = checkParams(text, opts, cb);
   const type = params.opts ? params.opts.type : undefined;
   const renderer = getStringRendererFromType(type);
   return render(renderer.render, text, params);
 }
 
-export function toDataURL (text, opts, cb) {
+export function toDataURL(text: string, opts: Object, cb: function) {
   const params = checkParams(text, opts, cb);
   const renderer = getRendererFromType(params.opts.type);
   return render(renderer.renderToDataURL, text, params);
 }
 
-export function toBuffer (text, opts, cb) {
+export function toBuffer(text: string, opts: Object, cb: function) {
   const params = checkParams(text, opts, cb);
   const renderer = getRendererFromType(params.opts.type);
   return render(renderer.renderToBuffer, text, params);
 }
 
-export function toFile (path, text, opts, cb) {
+export function toFile(path: string, text: string, opts: Object, cb: function) {
   if (
     typeof path !== "string" ||
     !(typeof text === "string" || typeof text === "object")
@@ -127,7 +132,7 @@ export function toFile (path, text, opts, cb) {
   return render(renderToFile, text, params);
 }
 
-export function toFileStream (stream, text, opts) {
+export function toFileStream(stream, text: string, opts: Object) {
   if (arguments.length < 2) {
     throw new Error("Too few arguments provided");
   }

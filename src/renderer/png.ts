@@ -1,22 +1,24 @@
-import fs from 'fs'
-import { PNG } from 'pngjs'
-import * as Utils from './utils'
+import fs from "fs";
+import { PNG } from "pngjs";
+import { getOptions, getImageWidth, qrToImageData } from "./utils";
+import { type QRCodeToDataURLOptionsJpegWebp as RendererOptions, type QRCode } from "qrcode";
 
-export function render (qrData, options) {
-  const opts = Utils.getOptions(options);
+export function render(qrData: QRCode, options: RendererOptions) {
+  const opts = getOptions(options);
   const pngOpts = opts.rendererOpts;
-  const size = Utils.getImageWidth(qrData.modules.size, opts);
+  const size = getImageWidth(qrData.modules.size, opts);
 
   pngOpts.width = size;
   pngOpts.height = size;
 
   const pngImage = new PNG(pngOpts);
-  Utils.qrToImageData(pngImage.data, qrData, opts);
+
+  qrToImageData(pngImage.data, qrData, opts);
 
   return pngImage;
 }
 
-export function renderToDataURL (qrData, options, cb) {
+export function renderToDataURL(qrData: QRCode, options: RendererOptions, cb: function) {
   if (typeof cb === "undefined") {
     cb = options;
     options = undefined;
@@ -30,7 +32,7 @@ export function renderToDataURL (qrData, options, cb) {
   });
 }
 
-export function renderToBuffer (qrData, options, cb) {
+export function renderToBuffer(qrData: QRCode, options: RendererOptions, cb: function) {
   if (typeof cb === "undefined") {
     cb = options;
     options = undefined;
@@ -52,7 +54,7 @@ export function renderToBuffer (qrData, options, cb) {
   png.pack();
 }
 
-export function renderToFile (path, qrData, options, cb) {
+export function renderToFile(path: string, qrData: QRCode, options: RendererOptions, cb: function | undefined): void {
   if (typeof cb === "undefined") {
     cb = options;
     options = undefined;
@@ -72,11 +74,11 @@ export function renderToFile (path, qrData, options, cb) {
   renderToFileStream(stream, qrData, options);
 }
 
-export function renderToFileStream (
+export function renderToFileStream(
   stream,
-  qrData,
-  options,
-) {
+  qrData: QRCode,
+  options: RendererOptions,
+): void {
   const png = render(qrData, options);
   png.pack().pipe(stream);
 }

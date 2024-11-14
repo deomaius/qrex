@@ -1,7 +1,9 @@
-import * as small from './terminal/terminal-small'
-import * as big from './terminal/terminal'
+import { type QRCodeToDataURLOptionsJpegWebp as RendererOptions, type QRCode } from "qrcode";
 
-export function render (qrData, options, cb) {
+import * as small from "./terminal/terminal-small";
+import * as big from "./terminal/terminal";
+
+export function render(qrData: QRCode, options: RendererOptions, cb: function) {
   if (options?.small) {
     return small.render(qrData, options, cb);
   }

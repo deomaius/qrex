@@ -1,5 +1,6 @@
-import fs from 'fs'
-import * as Utils from './utils'
+import fs from 'fs';
+import { getOptions } from "./utils";
+import { type QRCodeToDataURLOptionsJpegWebp as RendererOptions, type QRCode } from "qrcode";
 
 const BLOCK_CHAR = {
   WW: " ",
@@ -8,6 +9,8 @@ const BLOCK_CHAR = {
   BW: "▀",
 };
 
+type BlockCharacters = typeof BLOCK_CHAR;
+
 const INVERTED_BLOCK_CHAR = {
   BB: " ",
   BW: "▄",
@@ -15,15 +18,15 @@ const INVERTED_BLOCK_CHAR = {
   WB: "▀",
 };
 
-function getBlockChar(top, bottom, blocks) {
+function getBlockChar(top: boolean, bottom: boolean, blocks: BlockCharacters) {
   if (top && bottom) return blocks.BB;
   if (top && !bottom) return blocks.BW;
   if (!top && bottom) return blocks.WB;
   return blocks.WW;
 }
 
-export function render (qrData, options, cb) {
-  const opts = Utils.getOptions(options);
+export function render(qrData: QRCode, options: RendererOptions, cb: function) {
+  const opts = getOptions(options);
   let blocks = BLOCK_CHAR;
   if (opts.color.dark.hex === "#ffffff" || opts.color.light.hex === "#000000") {
     blocks = INVERTED_BLOCK_CHAR;
@@ -62,7 +65,7 @@ export function render (qrData, options, cb) {
   return output;
 }
 
-export function renderToFile (path, qrData, options, cb) {
+export function renderToFile(path: string, qrData: QRCode, options: RendererOptions, cb: function) {
   if (typeof cb === "undefined") {
     cb = options;
     options = undefined;
