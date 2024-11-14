@@ -36,14 +36,15 @@ export function isValid(level: Mode): boolean {
   );
 }
 
-export function from(value: Mode, defaultValue: Mode): Mode {
-  if (isValid(value)) {
-    return value;
-  }
-
-  try {
-    return fromString(value);
-  } catch (e) {
-    return defaultValue;
+export function from(value: Mode | string, defaultValue: Mode): Mode {
+  if (typeof value !== 'string') {
+    return isValid(value) ? value : defaultValue;
+  } else {
+    try {
+      return fromString(value);
+    } catch {
+      return defaultValue;
+    }
   }
 }
+

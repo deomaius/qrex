@@ -1,4 +1,5 @@
-import { type Mode, ALPHANUMERIC } from './mode';
+import { type Mode, ALPHANUMERIC } from "./mode";
+import { BitBuffer } from "./bit-buffer";
 
 /**
  * Array of characters available in alphanumeric mode
@@ -60,9 +61,9 @@ const ALPHA_NUM_CHARS: Array<string> = [
 
 export class AlphanumericData {
   mode: Mode;
-  data: string[];
+  data: string;
 
-  constructor(data: string[]) {
+  constructor(data: string) {
     this.data = data;
     this.mode = ALPHANUMERIC;
   }
@@ -75,7 +76,7 @@ export class AlphanumericData {
     return AlphanumericData.getBitsLength(this.data.length);
   }
 
-  write(bitBuffer: Buffers): void {
+  write(bitBuffer: BitBuffer): void {
     let i;
 
     // Input data characters are divided into groups of two characters
